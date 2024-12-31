@@ -25,6 +25,8 @@ set "bat_dir=%~dp1"
 set "sed=%temp%\2exe.sed"
 
 echo Creazione di "%~n1.exe" in corso...
+
+:: Copia il contenuto dello script corrente in un file .sed temporaneo
 copy /y "%~f0" "%sed%" >nul
 
 :: Genera il file .sed per IExpress
@@ -58,9 +60,15 @@ copy /y "%~f0" "%sed%" >nul
 :: Crea l'eseguibile con IExpress
 iexpress /n /q /m "%sed%"
 
+:: Verifica se l'eseguibile è stato creato correttamente
+if exist "%target.exe%" (
+    echo Conversione completata. Il file eseguibile è stato creato in: "%target.exe%"
+) else (
+    echo Errore: La creazione dell'eseguibile non è riuscita.
+)
+
 :: Elimina il file .sed temporaneo
 del /q /f "%sed%"
 
-echo Conversione completata. Il file eseguibile è stato creato in: "%target.exe%"
 pause
 exit /b 0
