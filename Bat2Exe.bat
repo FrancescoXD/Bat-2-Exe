@@ -1,19 +1,20 @@
 @echo off
 Title Batch to Exe Converter
-Mode 71,3
 echo(
 
 :: Verifica se è stato passato un argomento
-if "%~1" equ "" (
+if "%~1"=="" (
     echo Usage: Passa il percorso del file batch come argomento.
     echo Esempio: %~nx0 "C:\percorso\file.bat"
-    Timeout /T 5 /nobreak >nul & Exit
+    pause
+    exit /b 1
 )
 
 :: Verifica se il file esiste
 if not exist "%~1" (
     echo Errore: Il file specificato non esiste o non è accessibile.
-    Timeout /T 5 /nobreak >nul & Exit
+    pause
+    exit /b 1
 )
 
 :: Imposta le variabili
@@ -21,7 +22,7 @@ set "target.exe=%~dpn1.exe"
 set "batch_file=%~f1"
 set "bat_name=%~nx1"
 set "bat_dir=%~dp1"
-Set "sed=%temp%\2exe.sed"
+set "sed=%temp%\2exe.sed"
 
 echo Creazione di "%~n1.exe" in corso...
 copy /y "%~f0" "%sed%" >nul
@@ -61,4 +62,5 @@ iexpress /n /q /m "%sed%"
 del /q /f "%sed%"
 
 echo Conversione completata. Il file eseguibile è stato creato in: "%target.exe%"
+pause
 exit /b 0
